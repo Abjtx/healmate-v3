@@ -11,11 +11,17 @@ body {
     position: relative;
 }
 
-#chat-messages {
+/* #chat-messages {
     max-height: 300px;
     overflow-y: auto;
     margin-bottom: 15px;
     padding-bottom: 20px;
+} */
+    /* Messages Area */
+    .chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
 }
 
 .container {
@@ -26,15 +32,47 @@ body {
     box-sizing: border-box;
 }
 
-.message {
+/* .message {
     margin-bottom: 15px;
     padding: 10px 15px;
     border-radius: 10px;
     max-width: 80%;
-    word-wrap: break-word;
-}
+    word-wrap: break-word; 
+    display: flex;
+} */
 
-.user-message {
+        /* Message Bubbles */
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        .bot-message {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            
+        }
+
+        .user-message .message-content {
+            background: #60c6f2;
+            color: white;
+        }
+
+        .bot-message .message-content {
+            background: #c4e0ec;
+            color: #1d6378;
+        }
+
+/* .user-message {
     background-color: #f0f3f6;
     color: #212529;
     margin-left: auto;
@@ -44,7 +82,7 @@ body {
     background-color: #c4e0ec;
     color: #212529;
     margin-right: auto;
-}
+} */
 
 .error-message {
     background-color: #f8d7da;
@@ -56,9 +94,9 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.message-content {
+/* .message-content {
     padding: 5px;
-}
+} */
 
 .symptom-highlight {
     color: #dc3545;
@@ -170,7 +208,7 @@ body {
 }
 
 /* Input Area */
-.input-container {
+/* .input-container {
     padding: 10px;
     border-top: 1px solid #e5e7eb;
     display: flex;
@@ -180,7 +218,15 @@ body {
     width: 100%;
     box-sizing: border-box;
     background-color: white;
+} */
+
+.input-container {
+    padding: 20px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 10px;
 }
+
 
 input[type="text"] {
     flex: 1;
