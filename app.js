@@ -1,0 +1,102 @@
+// Main application logic
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM elements
+    const chatMessages = document.getElementById('chat-messages');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-btn');
+    const urgentWarning = document.getElementById('urgent-warning');
+    
+    // Function to add a message to the chat
+    function addMessage(message, isUser = false, isError = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'} ${isError ? 'error-message' : ''}`;
+        
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        messageContent.innerHTML = message;
+        
+        messageDiv.appendChild(messageContent);
+        chatMessages.appendChild(messageDiv);
+        
+        // Scroll to the bottom of the chat
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Function to handle user input
+    async function handleUserInput() {
+        const message = userInput.value.trim();
+        
+        if (!message) return;
+        
+        // Add user message to chat
+        addMessage(message, true);
+        
+        // Clear input field
+        userInput.value = '';
+        
+        try {
+            // Show loading indicator
+            const loadingMessage = 'Analyzing your symptoms...';
+            addMessage(loadingMessage, false);
+            
+            // Send message to Flask backend
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message })
+            });
+            
+            // Remove loading message
+            chatMessages.removeChild(chatMessages.lastChild);
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to get response from server');
+            }
+            
+            const data = await response.json();
+            
+            // Process the response
+            if (data.error) {
+                addMessage(`Error: ${data.error}`, false, true);
+                return;
+            }
+            
+            // Display the bot's response
+            addMessage(data.reply, false);
+            
+            // Handle urgent symptoms warning
+            if (data.urgencyCheck && data.urgencyCheck.isUrgent) {
+                let warningText = '<strong>⚠️ Urgent symptoms detected!</strong> ';
+                if (data.urgencyCheck.urgentSymptoms && data.urgencyCheck.urgentSymptoms.length > 0) {
+                    warningText += `You mentioned: <span class="urgent-symptom">${data.urgencyCheck.urgentSymptoms.join(', ')}</span>. `;
+                }
+                warningText += 'Please seek immediate medical attention or call emergency services.';
+                urgentWarning.innerHTML = warningText;
+                urgentWarning.style.display = 'block';
+            } else {
+                urgentWarning.style.display = 'none';
+            }
+            
+        } catch (error) {
+            console.error('Error sending message:', error);
+            
+            // Show error message
+            addMessage(`Error: ${error.message}`, false, true);
+        }
+    }
+    
+    // Event listeners
+    sendButton.addEventListener('click', handleUserInput);
+    
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleUserInput();
+        }
+    });
+    
+    // Focus input on page load
+    userInput.focus();
+}); 

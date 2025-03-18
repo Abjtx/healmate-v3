@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealMate Medical Chatbot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="threeD">  HEALMATE  </div>   
+
+    <div class="container">
+        
+        <div class="row justify-content-center">
+            
+            <div class="col-md-8">
+               
+                <div class="card mt-5">
+                   
+                    <div class="card-header bg-primary text-white">
+                        
+                        <!-- <h2 class="text-center">HealMate Medical Chatbot</h2> -->
+                    </div>
+                    <div class="card-body">
+                        <div id="chat-container">
+                            <div id="chat-messages">
+                                <div class="message bot-message">
+                                    <div class="message-content">
+                                        Hello! I'm HealMate, your medical assistant. Please describe your symptoms, and I'll help assess them. Remember, this is not a replacement for professional medical advice.
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="urgent-warning" class="alert alert-danger mt-3" style="display: none;">
+                                <strong>⚠️ Urgent symptoms detected!</strong> Please seek immediate medical attention or call emergency services.
+                            </div>
+                            <div class="input-container">
+                                <input type="text" id="user-input" class="form-control" placeholder="Describe your symptoms...">
+                                <button id="send-btn" class="btn btn-primary">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>Disclaimer: This chatbot provides general information only and is not a substitute for professional medical advice, diagnosis, or treatment.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html> 
