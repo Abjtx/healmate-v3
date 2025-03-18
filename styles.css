@@ -1,23 +1,31 @@
 body {
     background-color: #c4e0ec;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
 #chat-container {
     min-height: 400px;
+    position: relative;
 }
 
 #chat-messages {
-    max-height: 400px;
+    max-height: 300px;
     overflow-y: auto;
     margin-bottom: 15px;
+    padding-bottom: 20px;
 }
 
 .container {
     max-width: 1200px;
     margin: 50px auto;
     padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
+
 .message {
     margin-bottom: 15px;
     padding: 10px 15px;
@@ -79,6 +87,9 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     padding-bottom: 50px; /* Add space for the footer */
+    height: auto !important; /* Override the fixed height */
+    min-height: 500px;
+    margin-bottom: 40px;
 }
 
 .card-header {
@@ -94,10 +105,18 @@ body {
     border-top: 1px solid #dee2e6;
     border-radius: 0 0 10px 10px;
     text-align: center;
+    font-size: 0.8rem;
+    box-sizing: border-box;
 }
 
 .btn-primary {
     background-color: #60c6f2;
+    border-color: #60c6f2;
+}
+
+.btn-primary:hover {
+    background-color: #4fb8e7;
+    border-color: #4fb8e7;
 }
 
 #urgent-warning {
@@ -131,37 +150,36 @@ body {
     text-shadow: 1px 1px 0 grey, 1px 2px 0 grey, 1px 3px 0 grey, 1px 4px 0 grey,
       1px 5px 0 grey, 1px 6px 0 grey, 1px 7px 0 grey, 1px 8px 0 grey,
       5px 13px 15px black;
-  }
+}
   
-
-  .threeD:hover {
+.threeD:hover {
     transition: 0.3s;
     transform: scale(1.1)translate(-50%, -50%);
     text-shadow: 1px -1px 0 grey, 1px -2px 0 grey, 1px -3px 0 grey,
       1px -4px 0 grey, 1px -5px 0 grey, 1px -6px 0 grey, 1px -7px 0 grey,
       1px -8px 0 grey, 5px -13px 15px #2090c0, 5px -13px 25px #808080;
-  }
+}
   
-
 .img-med-assistant {
     width: 20%;
     position: absolute;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    
-    
+    z-index: 1;
 }
 
 /* Input Area */
 .input-container {
-    padding: 20px;
+    padding: 10px;
     border-top: 1px solid #e5e7eb;
     display: flex;
     gap: 10px;
     position: absolute;
-    bottom: 60px; /* Adjusted to move the container a little up from the bottom of the page */
+    bottom: 60px;
     width: 100%;
+    box-sizing: border-box;
+    background-color: white;
 }
 
 input[type="text"] {
@@ -179,4 +197,176 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-family: cursive;
+    white-space: nowrap;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 992px) {
+    .container {
+        margin: 30px auto;
+    }
+    
+    .img-med-assistant {
+        width: 25%;
+    }
+    
+    .threeD {
+        font-size: 3em;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 20px auto;
+        padding: 10px;
+    }
+    
+    .img-med-assistant {
+        width: 30%;
+        opacity: 0.7;
+    }
+    
+    .threeD {
+        font-size: 2.5em;
+        margin-top: 8%;
+    }
+    
+    .card {
+        margin-top: 70px !important;
+    }
+    
+    #chat-messages {
+        max-height: 250px;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        margin: 10px auto;
+        padding: 5px;
+    }
+    
+    .img-med-assistant {
+        width: 40%;
+        opacity: 0.5;
+        right: -5%;
+    }
+    
+    .threeD {
+        font-size: 2em;
+        margin-top: 10%;
+    }
+    
+    .card {
+        margin-top: 60px !important;
+    }
+    
+    button {
+        padding: 10px 15px;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+    
+    #chat-messages {
+        max-height: 200px;
+    }
+    
+    .card-footer small {
+        font-size: 0.7rem;
+    }
+    
+    .input-container {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 400px) {
+    .threeD {
+        font-size: 1.5em;
+    }
+    
+    .img-med-assistant {
+        width: 35%;
+        top: 40%;
+    }
+    
+    .card {
+        min-height: 450px;
+    }
+    
+    #chat-messages {
+        max-height: 180px;
+    }
+}
+
+/* Mobile Device Specific Styles */
+.mobile-device #chat-messages {
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.mobile-device .input-container {
+    position: fixed;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 100;
+    background-color: white;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-device .card-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+/* Fix for iOS input fields */
+@supports (-webkit-touch-callout: none) {
+    input, button {
+        font-size: 16px; /* Prevents iOS zoom on focus */
+    }
+    
+    .mobile-device #chat-container {
+        padding-bottom: 120px; /* Additional padding to prevent content from being hidden behind the fixed input */
+    }
+}
+
+/* Dark mode support for devices with dark mode preference */
+@media (prefers-color-scheme: dark) {
+    .mobile-device body {
+        background-color: #213547;
+        color: #f9f9f9;
+    }
+    
+    .mobile-device .card {
+        background-color: #2d3748;
+        color: #f9f9f9;
+    }
+    
+    .mobile-device .user-message {
+        background-color: #3a4755;
+        color: #f9f9f9;
+    }
+    
+    .mobile-device .bot-message {
+        background-color: #2d3748;
+        color: #f9f9f9;
+        border: 1px solid #4a5568;
+    }
+    
+    .mobile-device .input-container {
+        background-color: #2d3748;
+        border-top: 1px solid #4a5568;
+    }
+    
+    .mobile-device input[type="text"] {
+        background-color: #3a4755;
+        color: #f9f9f9;
+        border: 1px solid #4a5568;
+    }
 }

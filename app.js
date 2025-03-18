@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const userInput = document.getElementById('user-input');
     const sendButton = document.getElementById('send-btn');
     const urgentWarning = document.getElementById('urgent-warning');
+    const chatContainer = document.getElementById('chat-container');
     
     // Function to add a message to the chat
     function addMessage(message, isUser = false, isError = false) {
@@ -19,6 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.appendChild(messageDiv);
         
         // Scroll to the bottom of the chat
+        scrollToBottom();
+    }
+    
+    // Function to scroll chat to bottom
+    function scrollToBottom() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
     
@@ -33,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Clear input field
         userInput.value = '';
+        
+        // On mobile, blur the input to hide keyboard
+        if (window.innerWidth <= 768) {
+            userInput.blur();
+        }
         
         try {
             // Show loading indicator
@@ -97,6 +108,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Focus input on page load
-    userInput.focus();
+    // Mobile optimization - prevent zooming when input is focused
+    userInput.addEventListener('focus', () => {
+        // On mobile, scroll to make sure the input is visible
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 300);
+        }
+    });
+    
+    // Handle window resize to maintain proper scrolling
+    window.addEventListener('resize', () => {
+        scrollToBottom();
+    });
+    
+    // Handle orientation change for mobile devices
+    window.addEventListener('orientationchange', () => {
+        setTimeout(scrollToBottom, 300);
+    });
+    
+    // Detect mobile devices and apply specific behaviors
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+        document.body.classList.add('mobile-device');
+    }
+    
+    // Focus input on page load for desktop
+    if (!isMobile) {
+        userInput.focus();
+    }
 }); 
