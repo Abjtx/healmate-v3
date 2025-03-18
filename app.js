@@ -7,6 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const urgentWarning = document.getElementById('urgent-warning');
     const chatContainer = document.getElementById('chat-container');
     
+    // Detect mobile devices and apply specific behaviors
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+        document.body.classList.add('mobile-device');
+        
+        // Add padding to ensure content isn't hidden behind fixed input
+        chatContainer.style.paddingBottom = '70px';
+    }
+    
     // Function to add a message to the chat
     function addMessage(message, isUser = false, isError = false) {
         const messageDiv = document.createElement('div');
@@ -26,6 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to scroll chat to bottom
     function scrollToBottom() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // For mobile, also scroll the window to ensure the input is visible
+        if (isMobile) {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
     }
     
     // Function to handle user input
@@ -40,9 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear input field
         userInput.value = '';
         
-        // On mobile, blur the input to hide keyboard
-        if (window.innerWidth <= 768) {
+        // On mobile, blur the input to hide keyboard after sending
+        if (isMobile) {
             userInput.blur();
+            // Small delay before scrolling to let the UI update
+            setTimeout(scrollToBottom, 100);
         }
         
         try {
@@ -108,31 +124,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Mobile optimization - prevent zooming when input is focused
+    // Mobile optimization - make sure the input is visible when focused
     userInput.addEventListener('focus', () => {
-        // On mobile, scroll to make sure the input is visible
-        if (window.innerWidth <= 768) {
+        if (isMobile) {
             setTimeout(() => {
                 window.scrollTo(0, document.body.scrollHeight);
             }, 300);
         }
     });
     
-    // Handle window resize to maintain proper scrolling
+    // Handle window resize to maintain proper layout
     window.addEventListener('resize', () => {
         scrollToBottom();
+        
+        // Reapply mobile class if needed
+        if (window.innerWidth <= 768 && !document.body.classList.contains('mobile-device')) {
+            document.body.classList.add('mobile-device');
+            chatContainer.style.paddingBottom = '70px';
+        } else if (window.innerWidth > 768 && document.body.classList.contains('mobile-device')) {
+            document.body.classList.remove('mobile-device');
+            chatContainer.style.paddingBottom = '0';
+        }
     });
     
     // Handle orientation change for mobile devices
     window.addEventListener('orientationchange', () => {
         setTimeout(scrollToBottom, 300);
     });
-    
-    // Detect mobile devices and apply specific behaviors
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) {
-        document.body.classList.add('mobile-device');
-    }
     
     // Focus input on page load for desktop
     if (!isMobile) {
